@@ -1,0 +1,43 @@
+{% extends "layout.html" %} {% block title %} Add Transaction {% endblock %} {%
+block main %}
+<h3>Add New Transaction</h3>
+<form action="/add" method="post" class="mx-auto" style="max-width: 400px">
+  <div class="mb-3">
+    <select name="type" class="form-select" required>
+      <option disabled selected value="">Type</option>
+      <option value="Expense">Expense (مصروفات)</option>
+      <option value="Income">Income (دخل)</option>
+    </select>
+  </div>
+  <div class="mb-3">
+    <input
+      autocomplete="off"
+      class="form-control"
+      name="category"
+      placeholder="Category (e.g. Food, Salary)"
+      type="text"
+      required
+    />
+  </div>
+  <div class="mb-3">
+    <input
+      class="form-control"
+      name="amount"
+      placeholder="Amount"
+      type="number"
+      step="0.01"
+      required
+    />
+  </div>
+  <div class="mb-3">
+    <input
+      class="form-control"
+      name="description"
+      placeholder="Description (Optional)"
+      type="text"
+    />
+  </div>
+  <button class="btn btn-primary" type="submit">Save Transaction</button>
+</form>
+
+{% endblock %}
