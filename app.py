@@ -1,7 +1,6 @@
-from curses import flash
+from flask import Flask, flash, redirect, render_template, request, session
 import os
 from cs50 import SQL
-from flask import Flask, render_template, request, session, redirect
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 from helpers import apology, login_required
@@ -115,7 +114,8 @@ def add():
         db.execute("UPDATE users SET cash = ? WHERE id = ?", cash, user_id)
         db.execute("INSERT INTO transactions (user_id, type, category, amount, description) VALUES (?, ?, ?, ?, ?)",
                    user_id, transaction_type, category, amount, description)
-
+        
+        flash("Transaction added successfully!", "success")
         return redirect("/")
     else:
         return render_template("add.html")
@@ -141,7 +141,7 @@ def register():
         rows = db.execute("SELECT * FROM users WHERE username = ?", username)
         session["user_id"] = rows[0]["id"]
 
-        flask.flash("Registered!")
+        flask.flash("Registered!", "primary")
         return redirect("/")
     else:
         return render_template("register.html")
@@ -171,7 +171,7 @@ def delete():
     db.execute("DELETE FROM transactions WHERE id = ? AND user_id = ?",
                transaction_id, user_id)
 
-    flask.flash("Transaction deleted and balance updated!")
+    flask.flash("Transaction deleted and balance updated!", "success")
     return redirect("/")
 
 
