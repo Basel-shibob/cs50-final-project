@@ -19,4 +19,4 @@ This is my final project for **Harvard's CS50x**. It's a web-based financial man
 3. Run the app: `flask run`.
 
 ---
-*Created by Mohamed Shibob (Ahmed) - March 2026*
+*Created by Mohamed Shibob (Basel) - March 2026*
