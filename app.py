@@ -39,7 +39,7 @@ def index():
     current_cash = user_data[0]["cash"]
 
     transactions = db.execute(
-        "SELECT type, category, amount, description, date FROM transactions WHERE user_id = ? ORDER BY date DESC", user_id)
+        "SELECT id, type, category, amount, description, date FROM transactions WHERE user_id = ? ORDER BY date DESC", user_id)
     return render_template("index.html", cash=current_cash, transactions=transactions)
 
 
@@ -145,6 +145,34 @@ def register():
         return redirect("/")
     else:
         return render_template("register.html")
+
+
+@app.route("/delete", methods=["POST"])
+@login_required
+def delete():
+    transaction_id = request.form.get("id")
+    user_id = session["user_id"]
+
+    transaction = db.execute(
+        "SELECT amount, type FROM transactions WHERE id = ? AND user_id = ?", transaction_id, user_id)
+
+    if not transaction:
+        return apology("Transaction not found!")
+
+    amount = transaction[0]["amount"]
+    t_type = transaction[0]["type"]
+
+    if t_type == "Expense":
+        db.execute("UPDATE users SET cash = cash + ? WHERE id = ?",
+                   amount, user_id)
+    else:
+        db.execute("UPDATE users SET cash = cash - ? WHERE id = ?",
+                   amount, user_id)
+    db.execute("DELETE FROM transactions WHERE id = ? AND user_id = ?",
+               transaction_id, user_id)
+
+    flask.flash("Transaction deleted and balance updated!")
+    return redirect("/")
 
 
 if __name__ == "__main__":
